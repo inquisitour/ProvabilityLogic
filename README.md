@@ -1,4 +1,4 @@
-# Paper 1: "The Interface Theorem"
+# Paper 1: "The Interface Theorem: Undecidability as a Necessary Consequence of Truth-Provability Separation in Formal Systems"
 
 Core Focus:
 1. Undecidability as necessary consequence
