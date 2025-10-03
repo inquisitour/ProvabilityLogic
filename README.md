@@ -1,7 +1,7 @@
 ### **Framework Integration**
 
-1.  [axiomatization](Framework Integration/axiomatization.md) - Complete axiom system GL + I1-I3
-    
+1.  [axiomatization](Framework Integration/axiomatization.md) 
+    - Complete axiom system GL + I1-I3
 2.  [operator_relationships](Framework Integration/operator_relationships.md) - Detailed □ and I relationship analysis
     
 3.  [semantic_definitions](Framework Integration/semantic_definitions.md) - Complete Kripke semantics for GL+I
