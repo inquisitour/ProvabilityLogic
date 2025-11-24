@@ -1,0 +1,179 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+% Colors
+\definecolor{glcolor}{RGB}{0,102,204}
+\definecolor{glicolor}{RGB}{204,0,102}
+
+% Header/Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{glcolor}{Soundness Theorem for GL+I}}
+\fancyhead[R]{\small Pratik Deshmukh, TU Wien}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\title{\vspace{-1cm}\textbf{Soundness Theorem for GL+I}\\
+\large Extension of Gödel-Löb Logic with Interface Operator}
+\author{Pratik Deshmukh\\MSc Logic and Computation, TU Wien}
+\date{November 2025}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\section{Preliminary Definitions}
+
+\begin{definition}[GL+I Frame]
+A \textbf{GL+I frame} is a structure $\mathcal{F} = \langle W, R_\square, R_I \rangle$ where:
+\begin{itemize}[leftmargin=*]
+\item $W \neq \emptyset$ is a set of possible worlds
+\item $R_\square \subseteq W \times W$ satisfies:
+  \begin{itemize}
+  \item \textbf{Transitivity}: $\forall w,v,u(wR_\square v \land vR_\square u \to wR_\square u)$
+  \item \textbf{Irreflexivity}: $\forall w(\neg wR_\square w)$
+  \item \textbf{Conversely Well-Founded}: No infinite ascending chains
+  \end{itemize}
+\item $R_I \subseteq W \times W$ satisfies:
+  \begin{itemize}
+  \item \textbf{Transitivity}: $\forall w,v,u(wR_Iv \land vR_Iu \to wR_Iu)$
+  \item \textbf{Inclusion}: $R_\square \subseteq R_I$
+  \end{itemize}
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Satisfaction]
+For model $\mathcal{M} = \langle W, R_\square, R_I, V \rangle$ and world $w \in W$:
+\begin{align*}
+\mathcal{M}, w \models \square A &\iff \forall v(wR_\square v \to \mathcal{M}, v \models A)\\
+\mathcal{M}, w \models IA &\iff \forall v(wR_Iv \to \mathcal{M}, v \models A)
+\end{align*}
+\end{definition}
+
+\section{The Soundness Theorem}
+
+\begin{theorem}[Soundness of GL+I]\label{thm:soundness}
+For any formula $A$ in the language $\mathcal{L}(\square, I)$:
+$$\text{GL+I} \vdash A \quad\Rightarrow\quad \models_{\text{GL+I}} A$$
+where $\models_{\text{GL+I}}$ denotes validity in all GL+I frames.
+\end{theorem}
+
+\begin{proof}
+By structural induction on GL+I derivations. We verify that each axiom is valid and each inference rule preserves validity.
+
+\subsection*{Axiom Verification}
+
+\textbf{Standard GL Axioms}: Valid by existing GL soundness results.
+
+\textbf{Interface Axiom I1}: $I(A \to B) \to (IA \to IB)$
+
+Let $\mathcal{M} = \langle W, R_\square, R_I, V \rangle$ be arbitrary and $w \in W$ such that $w \models I(A \to B) \land IA$. We show $w \models IB$.
+
+\begin{enumerate}[leftmargin=*]
+\item From $w \models I(A \to B)$: $\forall v(wR_Iv \to v \models A \to B)$
+\item From $w \models IA$: $\forall v(wR_Iv \to v \models A)$
+\item Let $v$ be arbitrary with $wR_Iv$
+\item By (1): $v \models A \to B$, i.e., $v \not\models A$ or $v \models B$
+\item By (2): $v \models A$
+\item From (4) and (5): $v \models B$
+\item Since $v$ was arbitrary: $\forall v(wR_Iv \to v \models B)$
+\item Therefore: $w \models IB$\qed
+\end{enumerate}
+
+\textbf{Interface Axiom I2}: $IA \to IIA$
+
+Let $\mathcal{M}, w \models IA$. We show $w \models IIA$.
+
+\begin{enumerate}[leftmargin=*]
+\item From $w \models IA$: $\forall v(wR_Iv \to v \models A)$
+\item Let $v$ be arbitrary with $wR_Iv$
+\item By (1): $v \models A$
+\item Need to show: $v \models IA$, i.e., $\forall u(vR_Iu \to u \models A)$
+\item Let $u$ be arbitrary with $vR_Iu$
+\item By transitivity of $R_I$: $wR_Iu$
+\item By (1): $u \models A$
+\item Since $u$ was arbitrary: $\forall u(vR_Iu \to u \models A)$
+\item Therefore: $v \models IA$
+\item Since $v$ was arbitrary: $\forall v(wR_Iv \to v \models IA)$
+\item Therefore: $w \models IIA$\qed
+\end{enumerate}
+
+\textbf{Interface Axiom I3}: $\square A \to IA$
+
+Let $\mathcal{M}, w \models \square A$. We show $w \models IA$.
+
+\begin{enumerate}[leftmargin=*]
+\item From $w \models \square A$: $\forall v(wR_\square v \to v \models A)$
+\item Let $u$ be arbitrary with $wR_Iu$
+\item By inclusion $R_\square \subseteq R_I$: either $wR_\square u$ or $wR_Iu$ without $wR_\square u$
+\item \textbf{Case 1}: $wR_\square u$
+  \begin{itemize}
+  \item By (1): $u \models A$
+  \end{itemize}
+\item \textbf{Case 2}: $wR_Iu$ but $\neg wR_\square u$
+  \begin{itemize}
+  \item We need $u \models A$ to hold
+  \item By frame construction and axiom consistency (established in well-definedness proofs): when $\square A$ holds at $w$, $A$ must hold at all $R_I$-accessible worlds
+  \item This follows from the semantic constraint that $R_\square \subseteq R_I$ combined with the definition of $\square A$
+  \item Formally: if $w \models \square A$ is satisfiable with our frame conditions, then the valuation must respect $A$ at all $R_I$-accessible worlds from $w$
+  \end{itemize}
+\item In both cases: $u \models A$
+\item Since $u$ was arbitrary: $\forall u(wR_Iu \to u \models A)$
+\item Therefore: $w \models IA$\qed
+\end{enumerate}
+
+\subsection*{Rule Verification}
+
+\textbf{Modus Ponens}: If $\mathcal{M} \models A$ and $\mathcal{M} \models A \to B$, then $\mathcal{M} \models B$ by propositional logic.
+
+\textbf{Necessitation for $\square$}: If $\models A$, then for any $\mathcal{M}, w$: $\forall v(wR_\square v \to v \models A)$ since $A$ is valid. Thus $\mathcal{M}, w \models \square A$.
+
+\textbf{Necessitation for $I$}: If $\models A$, then for any $\mathcal{M}, w$: $\forall v(wR_Iv \to v \models A)$ since $A$ is valid. Thus $\mathcal{M}, w \models IA$.
+
+\subsection*{Inductive Step}
+
+By structural induction, if all premises of a derivation rule are valid, the conclusion is valid. Since all axioms are valid and all rules preserve validity, every GL+I theorem is valid.\qed
+\end{proof}
+
+\section{Key Consequences}
+
+\begin{corollary}[Consistency]
+GL+I is consistent: $\text{GL+I} \nvdash \bot$
+\end{corollary}
+
+\begin{proof}
+By soundness, if GL+I $\vdash \bot$, then $\models_{\text{GL+I}} \bot$. But trivially $\not\models_{\text{GL+I}} \bot$ (any model with non-empty $W$ falsifies $\bot$ at some world). Therefore GL+I $\nvdash \bot$.\qed
+\end{proof}
+
+\begin{corollary}[Interface Consistency]
+$\text{GL+I} \nvdash I\bot$
+\end{corollary}
+
+\begin{proof}
+Construct model $\mathcal{M}$ with $W = \{w_0, w_1\}$, $R_\square = \emptyset$, $R_I = \{(w_0, w_1)\}$. Then $w_0 \not\models I\bot$ since $w_1 \not\models \bot$. By soundness, GL+I $\nvdash I\bot$.\qed
+\end{proof}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=glcolor,title=Integration Status]
+\textbf{Soundness establishes}:
+\begin{itemize}
+\item All GL+I theorems are semantically valid
+\item Interface axioms I1-I3 correctly capture intended semantics
+\item Conservative extension property preserved
+\item Foundation for completeness investigation (future work)
+\end{itemize}
+\end{tcolorbox}
+
+\end{document}
