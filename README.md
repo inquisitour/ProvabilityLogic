@@ -49,4 +49,5 @@
 4.  [closure_properties](Well-Definedness%20Proofs/closure_properties.md) - Inference rule preservation and system integrity
 
 ### **Soundness Proofs**
-Will be added soon!
+
+[soundness_theorem](Soundness/soundness.pdf)
