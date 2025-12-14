@@ -50,4 +50,5 @@
 
 ### **Soundness Proofs**
 
-[soundness_theorem](Soundness/soundness.pdf)
+1. [soundness_theorem](Soundness/soundness.pdf)
+2. [submission](docs/)
